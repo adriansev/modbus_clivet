@@ -29,9 +29,9 @@ std::memset(mixed_data_tbl, 0, sizeof mixed_data_tbl); // set the content to 0
 uint16_t software_ver_tbl [4];
 std::memset(software_ver_tbl, 0, sizeof software_ver_tbl); // set the content to 0
 
-int rc;
+int err_val;
 
-mb = modbus_new_tcp("10.10.8.27", 502);
+mb = modbus_new_tcp ("10.10.8.27", 502);
 if (modbus_connect(mb) == -1) {
     std::cerr << "Connection failed: " << modbus_strerror(errno) << std::endl;
     modbus_free(mb);
@@ -40,8 +40,8 @@ if (modbus_connect(mb) == -1) {
 
 // Read the software version table
 // info at page 5, begining of the page
-rc = modbus_read_registers(mb, SOFTWARE_VER_ADDR, sizeof(software_ver_tbl)/sizeof(software_ver_tbl[0]), software_ver_tbl);
-if (rc == -1) {
+err_val = modbus_read_registers(mb, SOFTWARE_VER_ADDR, sizeof(software_ver_tbl)/sizeof(software_ver_tbl[0]), software_ver_tbl);
+if (err_val == -1) {
     std::cerr << "Reading registers : " << modbus_strerror(errno) << std::endl;
     modbus_free(mb);
     return -1;
@@ -57,8 +57,8 @@ std::cout << "Firmware revision E2 = " << firm_rev_e2  << std::endl;
 
 // Read the full size of table starting with MIXED_DATA_ADDR
 // info at page 12, end of the page table
-rc = modbus_read_registers(mb, MIXED_DATA_ADDR, (int)(sizeof(mixed_data_tbl)/sizeof(mixed_data_tbl[0])), mixed_data_tbl);
-if (rc == -1) {
+err_val = modbus_read_registers(mb, MIXED_DATA_ADDR, (int)(sizeof(mixed_data_tbl)/sizeof(mixed_data_tbl[0])), mixed_data_tbl);
+if (err_val == -1) {
     std::cerr << "Reading registers : " << modbus_strerror(errno) << std::endl;
     modbus_free(mb);
     return -1;
@@ -71,15 +71,13 @@ if (rc == -1) {
 // std::cout << "Supply temp = " << temp_supply << std::endl;
 // std::cout << "Fresh air temp = " << temp_freshair << std::endl;
 
-for (int i=0; i < rc; i++) {
+for (int i=0; i < (int)(sizeof(mixed_data_tbl)/sizeof(mixed_data_tbl[0])); i++) {
     printf("mixed data table :: reg[%d]=%d (0x%X)\n", i, mixed_data_tbl[i], mixed_data_tbl[i]);
     }
 
 
 modbus_close(mb);
 modbus_free(mb);
-
-
 return 0;
 }
 
