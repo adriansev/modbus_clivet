@@ -49,7 +49,7 @@ if (rc == -1) {
 
 uint16_t firm_screen = software_ver_tbl[0];
 uint16_t firm_rev = software_ver_tbl[1];
-uint8_t firm_rev_e2 = MODBUS_GET_HIGH_BYTE(software_ver_tbl[2]);
+uint16_t firm_rev_e2 = MODBUS_GET_HIGH_BYTE(software_ver_tbl[2]);
 
 std::cout << "Firmware screen = " << firm_screen << std::endl;
 std::cout << "Firmware revision = " << firm_rev  << std::endl;
@@ -64,21 +64,15 @@ if (rc == -1) {
     return -1;
     }
 
-float temp_return = mixed_data_tbl[3];
-float temp_supply = mixed_data_tbl[4];
-float temp_freshair = mixed_data_tbl[5];
-
-// std::cout << "Return temp = " << ((float)temp_return)/10 << std::endl;
-// std::cout << "Supply temp = " << ((float)temp_supply)/10 << std::endl;
-// std::cout << "Fresh air temp = " << ((float)temp_freshair)/10 << std::endl;
-
-std::cout << "Return temp = " << temp_return << std::endl;
-std::cout << "Supply temp = " << temp_supply << std::endl;
-std::cout << "Fresh air temp = " << temp_freshair << std::endl;
-
+// float temp_return = modbus_get_float (&mixed_data_tbl[3]);
+// float temp_supply = modbus_get_float (&mixed_data_tbl[4]);
+// float temp_freshair = modbus_get_float (&mixed_data_tbl[5]);
+// std::cout << "Return temp = " << temp_return << std::endl;
+// std::cout << "Supply temp = " << temp_supply << std::endl;
+// std::cout << "Fresh air temp = " << temp_freshair << std::endl;
 
 for (int i=0; i < rc; i++) {
-    printf("reg[%d]=%d (0x%X)\n", i, mixed_data_tbl[i], mixed_data_tbl[i]);
+    printf("mixed data table :: reg[%d]=%d (0x%X)\n", i, mixed_data_tbl[i], mixed_data_tbl[i]);
     }
 
 
